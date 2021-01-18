@@ -10,7 +10,7 @@ jobs:
   cancel-dups:
     name: Cancel duplicate workflow runs
     runs-on: ubuntu-latest
-    if: github.event.workflow_run.name != 'B'
+    if: github.event.workflow_run.name != 'Workflow B'
 
     steps:
       - uses: potiuk/cancel-workflow-runs@master
@@ -26,7 +26,7 @@ jobs:
 
     # Keep the branch part of this condition in sync with the corresponding condition in build.yml
     if: >
-      github.event.workflow_run.name == 'B' && ! (
+      github.event.workflow_run.name == 'Workflow B' && ! (
         github.event.workflow_run.head_branch == '🙄'
       )
 
