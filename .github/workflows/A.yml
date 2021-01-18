@@ -1,0 +1,13 @@
+name: Workflow A
+on: push
+
+jobs:
+  sleep:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Before
+        run: echo "..."
+      - name: Sleep
+        run: sleep 60
+      - name: After
+        run: echo "done"
