@@ -1,0 +1,66 @@
+name: Status test
+
+on:
+  pull_request:
+
+jobs:
+  pass:
+    name: Status test pass
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - run: /bin/true
+
+  fail:
+    name: Status test fail
+    runs-on: ubuntu-latest
+    outputs:
+      title: XXX title
+      summary: XXX summary
+      text: XXX text
+      foobar: XXX foobar
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - run: |
+          echo "::error::This is an error"
+          echo "::error file=.github/workflows/status.yml,line=25,col=77::This is an error with a file, line, and column"
+          echo "Failing now"
+          exit 1
+
+  custom:
+    name: Custom status?
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Create status
+        run: |
+          curl -v \
+            --url "${GITHUB_API_URL}/repos/${{ github.repository }}/statuses/${{ github.event.pull_request.head.sha }}" \
+            --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+            --header 'content-type: application/json' \
+            --data '{
+              "state": "failure",
+              "target_url": "https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}/checks?check_run_id=${{ github.run_id }}",
+              "description": "Testing a custom status",
+              "context": "Custom status?"
+            }'
+
+  if_and_status_functions:
+    name: Test `if` and status functions
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Failing step
+        run: /bin/false
+
+      - name: If with no status function
+        if: ${{ 'a' == 'a' }}
+        run: /bin/true
+
+      - name: If with status function
+        if: ${{ 'a' == 'a' && always() }}
+        run: /bin/true
