@@ -1,3 +1,3 @@
 const github = require( '@actions/github' );
 
-console.dir( github.context );
+console.log( JSON.stringify( github.context, null, 4 ) );
