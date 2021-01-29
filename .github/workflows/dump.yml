@@ -1,8 +1,9 @@
 name: dump
-on: pull_request_review
+on: push
 jobs:
   dump:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/dump
+      - env:
+          GH: ${{ toJSON(github) }}
+        run: echo "$GH"
