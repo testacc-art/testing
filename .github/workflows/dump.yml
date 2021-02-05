@@ -7,6 +7,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - run: |
+          git fetch origin "$GITHUB_BASE_REF"
+          git merge FETCH_HEAD
       - run: cat foo.txt
       - run: git branch -a
       - run: git log
