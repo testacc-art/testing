@@ -1,0 +1,10 @@
+name: Dump
+on: pull_request
+
+jobs:
+  dump:
+    name: Dump foo.txt
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: cat foo.txt
