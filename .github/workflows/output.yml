@@ -1,0 +1,24 @@
+name: Outputs test
+on: push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    outputs:
+      foo: ${{ steps.x.outputs.test == 'true' }}
+      bar: ${{ steps.x.outputs.test != 'true' }}
+    steps:
+      - id: x
+        run: echo "::set-output name=test::true"
+
+  test2:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - run: |
+          echo "foo = '${{ needs.test.outputs.foo }}'"
+          echo "bar = '${{ needs.test.outputs.bar }}'"
+      - if: needs.test.outputs.foo == 'true'
+        run: true
+      - if: needs.test.outputs.bar == 'false'
+        run: true
