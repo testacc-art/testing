@@ -1,5 +1,5 @@
 name: dump
-on: push
+on: [ pull_request ]
 jobs:
   dump:
     runs-on: ubuntu-latest
