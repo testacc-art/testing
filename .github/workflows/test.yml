@@ -10,5 +10,5 @@ jobs:
     steps:
       - name: Expr
         env:
-          XXX: build-${{ github.event_name == 'push' && github.run_id || "pr" }}-${{ github.ref }}
+          XXX: build-${{ github.event_name == 'push' && github.run_id || 'pr' }}-${{ github.ref }}
         run: echo "$XXX"
