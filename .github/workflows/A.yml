@@ -1,0 +1,15 @@
+name: A
+on:
+  push:
+
+concurrency:
+  group: foo
+  cancel-in-progress: true
+
+jobs:
+  job:
+    name: A
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sleep
+        run: sleep 20
