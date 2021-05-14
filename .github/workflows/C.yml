@@ -21,3 +21,33 @@ jobs:
     steps:
       - name: Sleep
         run: sleep 20
+  job3:
+    name: C3
+    runs-on: ubuntu-latest
+    concurrency:
+      group: C
+      cancel-in-progress: true
+    steps:
+      - name: Sleep
+        run: sleep 20
+  job4:
+    name: C4
+    runs-on: ubuntu-latest
+    concurrency:
+      group: C
+      cancel-in-progress: true
+    steps:
+      - name: Sleep
+        run: sleep 20
+  jobX:
+    name: matrix ${{matrix.n}}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        n: [ 1, 2, 3, 4 ]
+    concurrency:
+      group: CM
+      cancel-in-progress: true
+    steps:
+      - name: Sleep
+        run: sleep 20
