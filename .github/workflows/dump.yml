@@ -1,7 +1,10 @@
 name: dump
-on: [ pull_request ]
+on:
+  pull_request:
+
 jobs:
   dump:
+    name: dump
     runs-on: ubuntu-latest
     steps:
       - name: Dump env
