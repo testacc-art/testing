@@ -4,6 +4,9 @@ jobs:
   dump:
     runs-on: ubuntu-latest
     steps:
-      - env:
+      - name: Dump env
+        run: env
+      - name: Dump github object
+        env:
           GH: ${{ toJSON(github) }}
         run: echo "$GH"
