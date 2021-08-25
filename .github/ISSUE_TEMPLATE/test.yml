@@ -1,0 +1,39 @@
+name: Test issue form
+description: Test the issue form
+body:
+  - type: checkboxes
+    id: the-checkboxes
+    attributes:
+      label: Checkboxes
+      description: These are checkboxes
+      options:
+        - label: Foo
+        - label: Bar
+        - label: Baz
+  - type: dropdown
+    id: single-dropdown
+    attributes:
+      label: A single-select dropdown
+      options:
+        - label: Foo
+        - label: Bar
+        - label: Baz
+  - type: dropdown
+    id: multi-dropdown
+    attributes:
+      label: A multi-select dropdown
+      multiple: true
+      options:
+        - label: Foo
+        - label: Bar
+        - label: Baz
+  - type: input
+    id: the-input
+    attributes:
+      label: An input field
+      placeholder: Put text here
+  - type: textarea
+    id: the-textarea
+    attributes:
+      label: A textarea field
+      placeholder: Put text here
