@@ -15,18 +15,18 @@ body:
     attributes:
       label: A single-select dropdown
       options:
-        - label: Foo
-        - label: Bar
-        - label: Baz
+        - Foo
+        - Bar
+        - Baz
   - type: dropdown
     id: multi-dropdown
     attributes:
       label: A multi-select dropdown
       multiple: true
       options:
-        - label: Foo
-        - label: Bar
-        - label: Baz
+        - Foo
+        - Bar
+        - Baz
   - type: input
     id: the-input
     attributes:
