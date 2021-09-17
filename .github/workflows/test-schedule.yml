@@ -6,6 +6,7 @@ on:
 jobs:
   foo:
     name: Foo
+    runs-on: ubuntu-latest
     if: secrets.FOO != ''
     steps:
       - run: |
@@ -13,6 +14,7 @@ jobs:
 
   bar:
     name: Bar
+    runs-on: ubuntu-latest
     if: secrets.BAR != ''
     steps:
       - run: |
