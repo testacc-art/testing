@@ -1,0 +1,19 @@
+name: Test schedule
+on:
+  schedule:
+    - cron: '0/5 * * * *'
+
+jobs:
+  foo:
+    name: Foo
+    if: secrets.FOO != ''
+    steps:
+      - run: |
+          echo "ok";
+
+  bar:
+    name: Bar
+    if: secrets.BAR != ''
+    steps:
+      - run: |
+          echo "ok";
