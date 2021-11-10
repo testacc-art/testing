@@ -8,6 +8,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          while command -v php 2>/dev/null ]]; do
-            rm -v "$(command -v php)"
-          done
+          id
+          echo "$PATH"
+          ls -ld /usr/local/bin
