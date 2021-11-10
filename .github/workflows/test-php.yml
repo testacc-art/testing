@@ -1,0 +1,10 @@
+name: Test PHP
+on:
+  push:
+
+jobs:
+  job:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - run: command -v php
