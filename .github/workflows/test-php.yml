@@ -7,4 +7,7 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
-      - run: command -v php
+      - run: |
+          while command -v php 2>/dev/null ]]; do
+            rm -v "$(command -v php)"
+          done
