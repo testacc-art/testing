@@ -12,3 +12,4 @@ jobs:
             sudo rm -v "$(command -v php)"
           done
           echo "ok"
+          cat /proc/cpuinfo
