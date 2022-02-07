@@ -26,10 +26,10 @@ jobs:
                 type: "section",
                 text: {
                   type: "mrkdwn",
-                  text: "Test",
-                },
-              },
-            ],
+                  text: "Test"
+                }
+              }
+            ]
           }'
 
       - name: Slack test
