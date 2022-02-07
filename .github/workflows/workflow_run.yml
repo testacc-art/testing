@@ -12,5 +12,5 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      name: Dump
-      run: jq -n --slurpfile event "$GITHUB_EVENT_PATH" '$event'
+      - name: Dump
+        run: jq -n --slurpfile event "$GITHUB_EVENT_PATH" '$event'
