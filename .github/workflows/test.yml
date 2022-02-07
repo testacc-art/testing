@@ -12,6 +12,3 @@ jobs:
         run: env
       - name: Event data
         run: cat $GITHUB_EVENT_PATH
-      - name: timeout
-        timeout-minutes: 1
-        run: sleep 120
