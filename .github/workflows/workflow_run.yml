@@ -1,0 +1,16 @@
+name: Workflow Run test
+on:
+  workflow_run:
+    types: [ 'completed' ]
+    workflows:
+      - Test
+    branches: [ '🙄' ]
+
+jobs:
+  job:
+    name: Dump
+    runs-on: ubuntu-latest
+
+    steps:
+      name: Dump
+      run: jq -n --slurpfile event "$GITHUB_EVENT_PATH" '$event'

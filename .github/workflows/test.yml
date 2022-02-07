@@ -1,10 +1,7 @@
 name: Test
 on:
-  pull_request_target:
-    branches: [ '🙄' ]
   push:
-    tags: [ testtag ]
-
+    branches: [ '🙄' ]
 
 jobs:
   job:
