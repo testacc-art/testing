@@ -12,5 +12,3 @@ jobs:
         run: env
       - name: Event data
         run: cat $GITHUB_EVENT_PATH
-      - name: Fail
-        run: false
