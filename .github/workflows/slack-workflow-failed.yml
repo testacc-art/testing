@@ -19,6 +19,7 @@ jobs:
           echo -n "::set-output name=message::"
           jq -nc --slurpfile event "$GITHUB_EVENT_PATH" '$event[0] as $e | $e.workflow_run as $run | {
             icon_emoji: ":github-rejected:",
+            text: "*\( $e.workflow.name ) failed on \( $run.head_branch )* (<\( $run.html_url \)|Run #\( $run.id )>)"
             blocks: [
               {
                 type: "section",
