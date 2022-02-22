@@ -13,3 +13,16 @@ jobs:
         run: env
       - name: Event data
         run: cat $GITHUB_EVENT_PATH
+      - name: phpinfo
+        run: php -i
+      - name: php 5.6
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 5.6
+          ini-values: error_reporting=E_ALL, display_errors=On, zend.assertions=1
+          tools: composer:${{ steps.versions.outputs.composer-version }}
+          extensions: mysql, imagick
+          coverage: none
+      - name: phpinfo
+        run: php -i
+
