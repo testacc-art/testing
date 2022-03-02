@@ -1,7 +1,7 @@
 name: Test
 on:
   push:
-    branches: [ '🙄' ]
+    branches: [ '🙄', 'foo-**', '*/bar-**' ]
     tags: [ 'tag1', 'tag2', 'tag3', 'tag4' ]
 
 jobs:
