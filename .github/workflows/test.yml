@@ -1,8 +1,7 @@
 name: Test
 on:
   push:
-    branches: [ '🙄' ]
-    paths: [ 'docs/**' ]
+    branches: [ '🙄', '**/*/foo-**' ]
     tags: [ 'tag1', 'tag2', 'tag3', 'tag4' ]
 
 jobs:
