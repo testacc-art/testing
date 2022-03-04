@@ -1,14 +1,119 @@
 name: Test
 on:
   push:
-    branches: [ '🙄' ]
 
 jobs:
   job:
     name: Test
     runs-on: ubuntu-latest
+    services:
+      db:
+        image: mariadb:latest
+        env:
+          MARIADB_ROOT_PASSWORD: wordpress
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5
+    container:
+      image: ghcr.io/automattic/jetpack-wordpress-dev:latest
+      env:
+        WP_DOMAIN: localhost
+        WP_ADMIN_USER: wordpress
+        WP_ADMIN_EMAIL: wordpress@example.com
+        WP_ADMIN_PASSWORD: wordpress
+        WP_TITLE: Hello World
+        MYSQL_HOST: db:3306
+        MYSQL_DATABASE: wordpress
+        MYSQL_USER: root
+        MYSQL_PASSWORD: wordpress
+        HOST_PORT: 80
+      ports:
+        - 80:80
     steps:
-      - name: Env
-        run: env
-      - name: Event data
-        run: cat $GITHUB_EVENT_PATH
+      - name: Sigh
+        run: |
+          apt-get update
+          apt-get install zip
+
+      - name: Setup mysql
+        run: |
+          cat <<EOF > ~/.my.cnf
+          [client]
+          host=${MYSQL_HOST%:*}
+          port=${MYSQL_HOST#*:}
+          user=$MYSQL_USER
+          password=$MYSQL_PASSWORD
+          EOF
+          chmod 0600 ~/.my.cnf
+          mysql -e "set global wait_timeout = 3600;"
+          mysql -e "create database wordpress;"
+
+      - name: Setup WordPress
+        run: |
+          cd /var/www/html
+          mkdir -p /var/log/php/ /var/scripts/
+          sed -i 's/apachectl -D FOREGROUND/apachectl start/' /usr/local/bin/run
+          echo '#!/bin/bash' > /var/scripts/run-extras.sh
+          /usr/local/bin/run
+          wp --allow-root core install --url=${WP_DOMAIN} --title="${WP_TITLE}" --admin_user=${WP_ADMIN_USER} --admin_password=${WP_ADMIN_PASSWORD} --admin_email=${WP_ADMIN_EMAIL} --skip-email
+          rm index.html
+          mkdir wp-content/mu-plugins
+
+          cat <<'EOF' > wp-content/mu-plugins/hack.php
+          <?php
+          $_SERVER['HTTPS'] = 'on';
+          add_filter( 'determine_current_user', function () { return 1; } );
+          function wp_validate_auth_cookie() { return true; }
+          function wp_verify_nonce() { return true; }
+
+          add_filter( 'site_transient_update_plugins', 'fake_plugin_update', 10, 1 );
+          function fake_plugin_update( $value ) {
+            $url = get_option( 'fake_plugin_update_url' );
+            if ( $url ) {
+              $value->response += $value->no_update;
+              foreach ( $value->response as $k => $r ) $value->response[$k]->package = $url;
+            }
+            return $value;
+          }
+          EOF
+
+      - uses: actions/checkout@v3
+
+      - name: Prepare plugin zips
+        shell: bash
+        run: |
+          unzip -d plugins plugins.zip
+          cd plugins
+          for zip in *-dev.zip; do
+            slug="${zip%-dev.zip}"
+
+            echo "::group::Fixing root path in $zip..."
+            unzip -q "$zip"
+            mv "$slug-dev" "$slug"
+            touch "$slug/ci-flag.txt"
+            rm "$zip"
+            zip -qr "$zip" "$slug"
+            rm -rf "$slug"
+            echo "::endgroup::"
+
+            echo "::group::Fetching $slug-stable.zip..."
+            JSON="$(curl "https://api.wordpress.org/plugins/info/1.0/$slug.json")"
+            if jq -e --arg slug "$slug" '.slug == $slug' <<<"$JSON" &>/dev/null; then
+              URL="$(jq -r '.download_link // ""' <<<"$JSON")"
+              if [[ -z "$URL" ]]; then
+                echo "Plugin has no stable release."
+              else
+                curl -L --fail --url "$URL" --output "$slug-stable.zip"
+              fi
+            elif jq -e '.error == "Plugin not found."' <<<"$JSON" &>/dev/null; then
+              echo "Plugin is not published."
+            else
+              echo "Unexpected response from WordPress.org API for $slug"
+              echo "$JSON"
+              exit 1
+            fi
+            echo "::endgroup::"
+          done
+
+      - name: Test upgrades
+        run: .github/files/test-plugin-update.sh
