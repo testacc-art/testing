@@ -35,6 +35,8 @@ jobs:
           apt-get update
           apt-get install zip
 
+      - uses: actions/checkout@v3
+
       - name: Setup mysql
         run: |
           cat <<EOF > ~/.my.cnf
@@ -58,26 +60,7 @@ jobs:
           wp --allow-root core install --url=${WP_DOMAIN} --title="${WP_TITLE}" --admin_user=${WP_ADMIN_USER} --admin_password=${WP_ADMIN_PASSWORD} --admin_email=${WP_ADMIN_EMAIL} --skip-email
           rm index.html
           mkdir wp-content/mu-plugins
-
-          cat <<'EOF' > wp-content/mu-plugins/hack.php
-          <?php
-          $_SERVER['HTTPS'] = 'on';
-          add_filter( 'determine_current_user', function () { return 1; } );
-          function wp_validate_auth_cookie() { return true; }
-          function wp_verify_nonce() { return true; }
-
-          add_filter( 'site_transient_update_plugins', 'fake_plugin_update', 10, 1 );
-          function fake_plugin_update( $value ) {
-            $url = get_option( 'fake_plugin_update_url' );
-            if ( $url ) {
-              $value->response += $value->no_update;
-              foreach ( $value->response as $k => $r ) $value->response[$k]->package = $url;
-            }
-            return $value;
-          }
-          EOF
-
-      - uses: actions/checkout@v3
+          cp "$GITHUB_WORKSPACE"/.github/files/test-plugin-update-hackplugin.php wp-content/mu-plugins/hack.php
 
       - name: Prepare plugin zips
         shell: bash
