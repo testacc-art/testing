@@ -10,7 +10,6 @@ module.exports = {
         'anomiex/testing',
     ],
     baseBranches: [ 'renovate-test' ],
-    cacheDir: '/tmp/renovate-cache',
 
     onboarding: false,
     requireConfig: false,
