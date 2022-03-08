@@ -1,6 +1,6 @@
-name: Test
+name: Test callee
 on:
-  push:
+  workflow_call:
 
 jobs:
   job:
@@ -11,6 +11,3 @@ jobs:
         run: env
       - name: Event data
         run: cat $GITHUB_EVENT_PATH
-
-  caller:
-    uses: ./.github/workflows/callee.yml
