@@ -20,5 +20,4 @@ jobs:
           token: ${{ secrets.RENOVATE_TOKEN }}
         env:
           LOG_LEVEL: 'debug'
-          # Remove this before merging too.
           RENOVATE_DRY_RUN: true
