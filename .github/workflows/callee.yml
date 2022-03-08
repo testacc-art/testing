@@ -3,8 +3,16 @@ on:
   workflow_call:
 
 jobs:
-  job:
-    name: Test
+  job1:
+    name: Test 1
+    runs-on: ubuntu-latest
+    steps:
+      - name: Env
+        run: env
+      - name: Event data
+        run: cat $GITHUB_EVENT_PATH
+  job2:
+    name: Test 2
     runs-on: ubuntu-latest
     steps:
       - name: Env
