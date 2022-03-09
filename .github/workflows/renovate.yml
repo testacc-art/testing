@@ -15,6 +15,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-renovate
       - run: find /tmp/renovate -exec ls -ld {} +
+      - run: sudo chown -R runneradmin /tmp/renovate
       - uses: renovatebot/github-action@v32.0.3
         with:
           configurationFile: .github/renovate-config.js
