@@ -9,13 +9,17 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
+        id: cache
         with:
-          path: /tmp/renovate/cache
-          key: ${{ runner.os }}-renovate2
+          path: /tmp/renovate-cache.tar.xz
+          key: ${{ runner.os }}-renovate3
           restore-keys: |
-            ${{ runner.os }}-renovate2
-      - run: find /tmp/renovate -exec ls -ld {} + || true
-      - run: if [[ -d /tmp/renovate ]]; then sudo chown -R runneradmin /tmp/renovate; fi
+            ${{ runner.os }}-renovate3
+      - if: steps.cache.outputs.cache-hit
+        run: |
+          if [[ -f /tmp/renovate-cache.tar.xz ]]; then
+            docker run --volume /tmp:/tmp --user 1000:$(getent group docker | awk -F: '{print $3}') --rm --workdir /tmp renovate/renovate:32.0.3-slim tar --xz -xvvf renovate-cache.tar.xz
+          fi
       - uses: renovatebot/github-action@v32.0.3
         with:
           configurationFile: .github/renovate-config.js
@@ -23,4 +27,8 @@ jobs:
         env:
           LOG_LEVEL: 'debug'
           RENOVATE_DRY_RUN: true
-      - run: find /tmp/renovate/cache -exec ls -ld {} +
+      - run: |
+          if [[ -d /tmp/renovate/cache ]]; then
+            rm -f /tmp/renovate-cache.tar.xz
+            docker run --volume /tmp:/tmp --user 1000:$(getent group docker | awk -F: '{print $3}') --rm --workdir /tmp renovate/renovate:32.0.3-slim tar --xz -cvvf renovate-cache.tar.xz renovate/cache
+          fi
