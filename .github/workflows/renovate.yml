@@ -8,6 +8,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: /tmp/renovate-cache
+          key: ${{ runner.os }}-renovate
+          restore-keys: |
+            ${{ runner.os }}-renovate
       - uses: renovatebot/github-action@v32.0.3
         with:
           configurationFile: .github/renovate-config.js
