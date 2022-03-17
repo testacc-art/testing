@@ -12,3 +12,36 @@ jobs:
         run: env
       - name: Event data
         run: cat $GITHUB_EVENT_PATH
+      - name: Check
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          which node
+          node --version
+          echo "RUNNER_TOOL_CACHE=$RUNNER_TOOL_CACHE"
+          ls "$RUNNER_TOOL_CACHE/node"
+          curl https://api.github.com/rate_limit -u "token:$TOKEN"
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ^16.13.2
+      - name: Check
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          which node
+          node --version
+          echo "RUNNER_TOOL_CACHE=$RUNNER_TOOL_CACHE"
+          ls "$RUNNER_TOOL_CACHE/node"
+          curl https://api.github.com/rate_limit -u "token:$TOKEN"
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.13.2
+      - name: Check
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          which node
+          node --version
+          echo "RUNNER_TOOL_CACHE=$RUNNER_TOOL_CACHE"
+          ls "$RUNNER_TOOL_CACHE/node"
+          curl https://api.github.com/rate_limit -u "token:$TOKEN"
