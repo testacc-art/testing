@@ -37,6 +37,7 @@ jobs:
       - uses: dmitry-shibanov/setup-node@v-dmshib/test-rate-limit
         with:
           node-version: 16.13.2
+          token: ""
       - name: Check
         env:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
