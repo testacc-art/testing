@@ -2,6 +2,7 @@ name: Test
 on:
   push:
     branches: [ '🙄' ]
+  workflow_dispatch:
 
 jobs:
   job:
@@ -36,6 +37,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16.13.2
+          token: ""
       - name: Check
         env:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
