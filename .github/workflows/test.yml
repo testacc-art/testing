@@ -34,10 +34,9 @@ jobs:
           echo "RUNNER_TOOL_CACHE=$RUNNER_TOOL_CACHE"
           ls "$RUNNER_TOOL_CACHE/node"
           curl https://api.github.com/rate_limit -u "token:$TOKEN"
-      - uses: actions/setup-node@v3
+      - uses: dmitry-shibanov/setup-node@v-dmshib/test-rate-limit
         with:
           node-version: 16.13.2
-          token: ""
       - name: Check
         env:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
